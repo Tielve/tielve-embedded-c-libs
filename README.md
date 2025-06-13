@@ -1,6 +1,9 @@
 # tielve-embedded-c-libs
-Creating Bare-Metal embedded libraries for AI/ML work.
+Creating Bare-Metal embedded libraries for the STM32H743 with a focus on ML/AI.
 
-## TO-DO
-- Create drivers for peripherals (Camera, Display, Microphone)
-- Add inference, convolution and quantization headers
+## WIP
+- Backpropagation
+- SPI and GPIO Drivers
+
+### TODO
+- UART, I2C, CAN, USB
