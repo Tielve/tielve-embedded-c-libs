@@ -143,7 +143,7 @@ static inline q15_t q15_exp_approx(q15_t x) {
     q15_t x2 = q15_mul_sat(x1,x1);
     q15_t x3 = q15_mul_sat(x2,x1);
 
-    q15_t result = Q15MAX + x1 + (x2 >> 2) + (x3 >> 3);
+    q15_t result = Q15MAX + x1 + (x2 >> 1) + (x3 >> 3);
     return result;
 }
 
@@ -292,7 +292,7 @@ static inline q7_t q7_exp_approx(q7_t x) {
     q7_t x2 = q7_mul_sat(x1,x1);
     q7_t x3 = q7_mul_sat(x2,x1);
 
-    q7_t result = Q7MAX + x1 + (x2 >> 2) + (x3 >> 3);
+    q7_t result = Q7MAX + x1 + (x2 >> 1) + (x3 >> 3);
     return result;
 }
 

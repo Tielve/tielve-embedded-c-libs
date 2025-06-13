@@ -1,7 +1,7 @@
 #ifndef TIELVE_NN_SEQUENTIAL_H
 #define TIELVE_NN_SEQUENTIAL_H
 
-#include "tielve_fixed_point.h"
+#include "../math/tielve_fixed_point.h"
 
 typedef bool (*q15_layer_forward_fn)(void *layer, q15_mat_t *input, q15_mat_t *output);
 typedef bool (*q7_layer_forward_fn)(void *layer, q7_mat_t *input, q7_mat_t *output);

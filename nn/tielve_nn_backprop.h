@@ -5,7 +5,7 @@
 #ifndef TIELVE_NN_BACKPROP_H
 #define TIELVE_NN_BACKPROP_H
 
-#include "tielve_fixed_point.h"
+#include "../math/tielve_fixed_point.h"
 
 static inline void q15_dense_backward(q15_t* input, q15_t* output_grad, q15_t* weights, q15_t* weight_grad, q15_t* bias_grad, q15_t* input_grad, int batch_size, int input_size, int output_size) {
     for (int i = 0; i < output_size; ++i) {
@@ -156,7 +156,7 @@ static inline void q15_conv2d_backward(q15_t* input, q15_t* output_grad, q15_t* 
                             }
                         }
                     }
-                    
+
                     int input_idx = batch * (in_h * in_w * in_channels) +
                                    in_y * (in_w * in_channels) +
                                    in_x * in_channels + in_ch;
@@ -181,7 +181,7 @@ static inline void q15_relu_backward(q15_t* input, q15_t* output_grad, q15_t* in
     }
 }
 
-static inline void q7_relu_backward(q15_t* input, q15_t* output_grad, q15_t* input_grad, int size) {
+static inline void q7_relu_backward(q7_t* input, q7_t* output_grad, q7_t* input_grad, int size) {
     for (int i = 0; i < size; i++) {
         if (input[i] > 0) {
             input_grad[i] = output_grad[i];
@@ -196,17 +196,17 @@ static inline void q15_leaky_relu_backward(q15_t* input, q15_t* output_grad, q15
         if (input[i] > 0) {
             input_grad[i] = output_grad[i];
         } else {
-            input_grad[i] = (output_grad[i] * alpha) >> 15;
+            input_grad[i] = (output_grad[i] * 329) >> Q15SHIFT;
         }
     }
 }
 
-static inline void q7_leaky_relu_backward(q15_t* input, q15_t* output_grad, q15_t* input_grad, int size) {
+static inline void q7_leaky_relu_backward(q7_t* input, q7_t* output_grad, q7_t* input_grad, int size) {
     for (int i = 0; i < size; i++) {
         if (input[i] > 0) {
             input_grad[i] = output_grad[i];
         } else {
-            input_grad[i] = (output_grad[i] * alpha) >> 15;
+            input_grad[i] = (output_grad[i] * 1) >> Q7SHIFT;
         }
     }
 }
@@ -219,11 +219,11 @@ static inline void q15_sigmoid_backward(q15_t* input, q15_t* output_grad, q15_t*
     }
 }
 
-static inline void q7_sigmoid_backward(q15_t* input, q15_t* output_grad, q15_t* input_grad, int size) {
+static inline void q7_sigmoid_backward(q7_t* input, q7_t* output_grad, q7_t* input_grad, int size) {
     for (int i = 0; i < size; i++) {
-        int32_t one_minus_output = Q15MAX - output_grad[i];
-        int32_t derivative = ((int32_t)output_grad[i] * one_minus_output) >> 15;
-        input_grad[i] = ((int32_t)output_grad[i] * derivative) >> 15;
+        int16_t one_minus_output = Q7MAX - output_grad[i];
+        int16_t derivative = ((int16_t)output_grad[i] * one_minus_output) >> Q7SHIFT;
+        input_grad[i] = ((int16_t)output_grad[i] * derivative) >> Q7SHIFT;
     }
 }
 
@@ -235,11 +235,11 @@ static inline void q15_tanh_backward(q15_t* input, q15_t* output_grad, q15_t* in
     }
 }
 
-static inline void q7_tanh_backward(q15_t* input, q15_t* output_grad, q15_t* input_grad, int size) {
+static inline void q7_tanh_backward(q7_t* input, q7_t* output_grad, q7_t* input_grad, int size) {
     for (int i = 0; i < size; i++) {
-        int32_t output_sq = ((int32_t)output_grad[i] * output_grad[i]) >> 15;
-        q15_t derivative = Q15MAX - output_sq;
-        input_grad[i] = ((int32_t)output_grad[i] * derivative) >> 15;
+        int16_t output_sq = ((int16_t)output_grad[i] * output_grad[i]) >> Q7SHIFT;
+        q7_t derivative = Q7MAX - output_sq;
+        input_grad[i] = ((int16_t)output_grad[i] * derivative) >> Q7SHIFT;
     }
 }
 #endif //TIELVE_NN_BACKPROP_H

@@ -8,7 +8,7 @@
 #define Q15ALPHA 328/32768
 #define Q7ALPHA 2/128
 
-#include "tielve_fixed_point.h"
+#include "../math/tielve_fixed_point.h"
 
 static inline q15_t q15_relu(q15_t x) {
     x = q15_clamp(x);

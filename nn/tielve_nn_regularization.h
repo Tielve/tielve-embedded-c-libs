@@ -2,8 +2,8 @@
 #define TIELVE_NN_REGULARIZATION_H
 
 #include <string.h>
-#include "tielve_fixed_point.h"
-#include "tielve_matrix_utils.h"
+#include "../math/tielve_fixed_point.h"
+#include "../math/tielve_matrix_utils.h"
 
 // ------------------------
 // Regularization Functions

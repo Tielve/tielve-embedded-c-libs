@@ -3,8 +3,8 @@
 #ifdef TRAINING_MODE
 #include "nn_backprop.h"
 #endif
-#include "tielve_fixed_point.h"
-#include "tielve_matrix_utils.h"
+#include "../math/tielve_fixed_point.h"
+#include "../math/tielve_matrix_utils.h"
 
 typedef struct {
     q15_mat_t weights;

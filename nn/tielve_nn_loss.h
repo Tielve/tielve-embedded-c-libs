@@ -1,7 +1,7 @@
 #ifndef TIELVE_NN_LOSS_H
 #define TIELVE_NN_LOSS_H
 
-#include "tielve_fixed_point.h"
+#include "../math/tielve_fixed_point.h"
 
 // --------------
 // Loss Functions
