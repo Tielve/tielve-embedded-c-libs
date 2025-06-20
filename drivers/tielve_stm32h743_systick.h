@@ -78,6 +78,6 @@ bool systick_timeout_elapsed(uint64_t start_tick, uint32_t timeout_ms);
  *
  * @param delay_ms Number of milliseconds to delay
  */
-void systick_delay_ms(uint32_t delay_ms);
+void delay_ms(uint32_t delay_ms);
 
 #endif //TIELVE_STM32H743_SYSTICK_H

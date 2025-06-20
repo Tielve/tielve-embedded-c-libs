@@ -68,7 +68,7 @@ bool systick_timeout_elapsed(uint64_t start_tick, uint32_t timeout_ms) {
     return (current_tick - start_tick) >= timeout_ms;
 }
 
-void systick_delay_ms(uint32_t delay_ms) {
+void delay_ms(uint32_t delay_ms) {
     if (!systick_initialized) {
         return;
     }

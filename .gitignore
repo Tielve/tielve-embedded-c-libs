@@ -1,0 +1,13 @@
+stm32h743xx.h
+stm32h7xx.h
+system_stm32h7xx.h
+startup_stm32h743xx.s
+cmake_install.cmake
+CMakeFiles/
+MakeFile
+STM32H743IITx_FLASH.ld
+.idea/
+firmware.elf
+*.txt
+Include/
+firmware.bin

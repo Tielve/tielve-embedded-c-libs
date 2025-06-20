@@ -64,27 +64,30 @@ static spi_status_t enable_spi_clock(SPI_TypeDef* hardware, volatile uint32_t** 
     if (hardware == SPI1) {
         *rcc_reg = &RCC_APB2ENR;
         *rcc_bit = RCC_APB2ENR_SPI1EN;
+        RCC_APB2ENR |= RCC_APB2ENR_SPI1EN;
     } else if (hardware == SPI2) {
         *rcc_reg = &RCC_APB1LENR;
         *rcc_bit = RCC_APB1LENR_SPI2EN;
+        RCC_APB1LENR |= RCC_APB1LENR_SPI2EN;
     } else if (hardware == SPI3) {
         *rcc_reg = &RCC_APB1LENR;
         *rcc_bit = RCC_APB1LENR_SPI3EN;
+        RCC_APB1LENR |= RCC_APB1LENR_SPI3EN;
     } else if (hardware == SPI4) {
         *rcc_reg = &RCC_APB2ENR;
         *rcc_bit = RCC_APB2ENR_SPI4EN;
+        RCC_APB2ENR |= RCC_APB2ENR_SPI4EN;
     } else if (hardware == SPI5) {
         *rcc_reg = &RCC_APB2ENR;
         *rcc_bit = RCC_APB2ENR_SPI5EN;
+        RCC_APB2ENR |= RCC_APB2ENR_SPI5EN;
     } else if (hardware == SPI6) {
         *rcc_reg = &RCC_APB4ENR;
         *rcc_bit = RCC_APB4ENR_SPI6EN;
+        RCC_APB4ENR |= RCC_APB4ENR_SPI6EN;
     } else {
         return SPI_ERROR_UNSUPPORTED_INSTANCE;
     }
-
-    // Enable the clock
-    **rcc_reg |= *rcc_bit;
 
     // Small delay to ensure clock is stable
     for (volatile int i = 0; i < 100; i++) {
@@ -217,20 +220,26 @@ spi_status_t spi_init(spi_handle_t* handle, SPI_TypeDef* hardware, const spi_con
     // Enable software slave management for master mode
     if (config->master_mode) {
         cfg2_reg |= SPI_CFG2_SSM;
+        cfg2_reg |= SPI_CFG2_SSIOP;
     }
 
     hardware->CFG2 = cfg2_reg;
 
     // Set transfer size to 0 (unlimited/manual control)
-    hardware->CR2 = 0;
+    hardware->CR2 = 1;
 
     // Clear any pending flags
     hardware->IFCR = SPI_IFCR_EOTC | SPI_IFCR_TXTFC | SPI_IFCR_UDRC |
                      SPI_IFCR_OVRC | SPI_IFCR_CRCEC | SPI_IFCR_TIFEC |
                      SPI_IFCR_MODFC | SPI_IFCR_TSERFC | SPI_IFCR_SUSPC;
 
+
     // Enable SPI peripheral
     hardware->CR1 |= SPI_CR1_SPE;
+
+    if (config->master_mode) {
+        hardware->CR1 |= SPI_CR1_SSI;
+    }
 
     // Initialize handle structure
     handle->hardware = hardware;

@@ -28,6 +28,7 @@ typedef struct {
     volatile uint32_t TXDR; ///< 0x20 Transmit Data Register
     volatile uint32_t RESERVED1[3]; ///< 0x24-0x2C Reserved
     volatile uint32_t RXDR; ///< 0x30 Receive Data Register
+    volatile uint32_t RESERVED2[3]; ///< 0x34-3C Reserved
 } SPI_TypeDef;
 
 /// Base addresses of SPI1-6
@@ -47,9 +48,9 @@ typedef struct {
 
 /// RCC Advanced Peripheral Bus
 #define RCC_BASE 0x58024400UL ///< RCC Base Address
-#define RCC_APB2ENR (*(volatile uint32_t*)(RCC_BASE + 0xA8)) ///< APB2 Enable
-#define RCC_APB1LENR (*(volatile uint32_t*)(RCC_BASE + 0xE0)) ///< APB1 Low Enable
-#define RCC_APB4ENR (*(volatile uint32_t*)(RCC_BASE + 0xF4)) ///< APB4 Enable
+#define RCC_APB2ENR (*(volatile uint32_t*)(RCC_BASE + 0x0F0)) ///< APB2 Enable
+#define RCC_APB1LENR (*(volatile uint32_t*)(RCC_BASE + 0x0E8)) ///< APB1 Low Enable
+#define RCC_APB4ENR (*(volatile uint32_t*)(RCC_BASE + 0x0F4)) ///< APB4 Enable
 
 // ---------------
 // Bit Definitions
@@ -139,16 +140,16 @@ typedef struct {
  * the result of the operation.
  */
 typedef enum {
-SPI_OK = 0, ///< Operation completed successfully
-SPI_ERROR_INVALID_HANDLE, ///< Handle pointer is NULL
-SPI_ERROR_INVALID_PARAM, ///< Invalid parameter passed to function
-SPI_ERROR_NOT_INITIALIZED, ///< Handle not properly initialized
-SPI_ERROR_ALREADY_INITIALIZED, ///< Handle already initialized
-SPI_ERROR_BUSY, ///< SPI peripheral is busy
-SPI_ERROR_TIMEOUT, ///< Operation timed out
-SPI_ERROR_HARDWARE_FAULT, ///< Hardware error detected
-SPI_ERROR_UNSUPPORTED_INSTANCE, ///< Invalid SPI instance
-SPI_ERROR_NO_AVAILABLE_HANDLES ///< Maximum number of handles exceeded
+    SPI_OK = 0, ///< Operation completed successfully
+    SPI_ERROR_INVALID_HANDLE, ///< Handle pointer is NULL
+    SPI_ERROR_INVALID_PARAM, ///< Invalid parameter passed to function
+    SPI_ERROR_NOT_INITIALIZED, ///< Handle not properly initialized
+    SPI_ERROR_ALREADY_INITIALIZED, ///< Handle already initialized
+    SPI_ERROR_BUSY, ///< SPI peripheral is busy
+    SPI_ERROR_TIMEOUT, ///< Operation timed out
+    SPI_ERROR_HARDWARE_FAULT, ///< Hardware error detected
+    SPI_ERROR_UNSUPPORTED_INSTANCE, ///< Invalid SPI instance
+    SPI_ERROR_NO_AVAILABLE_HANDLES ///< Maximum number of handles exceeded
 } spi_status_t;
 
 /**
