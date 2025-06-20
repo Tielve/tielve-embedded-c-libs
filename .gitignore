@@ -11,3 +11,5 @@ firmware.elf
 *.txt
 Include/
 firmware.bin
+main.c
+drivers/test.c
