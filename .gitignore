@@ -4,7 +4,7 @@ system_stm32h7xx.h
 startup_stm32h743xx.s
 cmake_install.cmake
 CMakeFiles/
-MakeFile
+Makefile
 STM32H743IITx_FLASH.ld
 .idea/
 firmware.elf
