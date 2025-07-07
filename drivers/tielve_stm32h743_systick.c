@@ -1,6 +1,7 @@
 //
 // Created by Jonathan Tielve
 //
+
 #include "tielve_stm32h743_systick.h"
 
 static volatile uint64_t system_tick_count = 0; ///< Tick counter
@@ -81,5 +82,5 @@ void delay_ms(uint32_t delay_ms) {
 
 /// Default ARM interrupt handler
 void SysTick_Handler(void) {
-    ++system_tick_count;
+    system_tick_count++;
 }

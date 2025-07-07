@@ -9,15 +9,10 @@
 
 #include "tielve_stm32h743_spi.h"
 
-#include <time.h>
-
+#include "tielve_stm32h743_gpio.h"
 #include "tielve_stm32h743_systick.h"
 
 #define NULL ((void *)0)
-#define APB2_FREQUENCY_HZ 240000000UL /// APB2 bus frequency (Hz)
-#define APB1_FREQUENCY_HZ 120000000UL /// APB1 bus frequency (Hz)
-#define APB4_FREQUENCY_HZ 120000000UL /// APB4 bus frequency (Hz)
-#define MAX_PRESCALER_POWER 7 ///< Maximum number of prescaler values (2^0 to 2^7)
 
 static spi_handle_t* active_handles[SPI_MAX_HANDLES] = {NULL}; ///< Handle pool to track active SPI instances
 static uint8_t active_handle_count = 0; ///< Number of currently active handles
@@ -37,7 +32,7 @@ static uint8_t calculate_prescaler(uint32_t bus_freq_hz, uint32_t desired_freq_h
         return 0xFF;  // Invalid parameters
     }
 
-    // Find the best prescaler (closest to but not exceeding desired frequency)
+    // Find the best prescaler
     uint8_t best_prescaler = 0xFF;
     uint32_t best_frequency = 0;
 
@@ -226,7 +221,7 @@ spi_status_t spi_init(spi_handle_t* handle, SPI_TypeDef* hardware, const spi_con
     hardware->CFG2 = cfg2_reg;
 
     // Set transfer size to 0 (unlimited/manual control)
-    hardware->CR2 = 1;
+    hardware->CR2 = 0;
 
     // Clear any pending flags
     hardware->IFCR = SPI_IFCR_EOTC | SPI_IFCR_TXTFC | SPI_IFCR_UDRC |
@@ -333,34 +328,41 @@ spi_status_t spi_transfer_byte(spi_handle_t* handle, uint8_t tx_data, uint8_t* r
 
     handle->transfer_in_progress = true;
 
+    blink_led(2, 500);
+
     // Start Transfer
     spi->CR1 |= SPI_CR1_CSTART;
+
+    blink_led(3, 500);
 
     // Wait for TXP flag
     while (!(spi->SR & SPI_SR_TXP)) {
         if (systick_timeout_elapsed(timeout_start, SPI_DEFAULT_TIMEOUT_MS)) {
             handle->transfer_in_progress = false;
+            blink_led(9, 500);
             return SPI_ERROR_TIMEOUT;
         }
     }
-
     // Write data to transmit register
     spi->TXDR = tx_data;
+    blink_led(4, 500);
 
     // Wait for RXP flag
     while (!(spi->SR & SPI_SR_RXP)) {
         if (systick_timeout_elapsed(timeout_start, SPI_DEFAULT_TIMEOUT_MS)) {
             handle->transfer_in_progress = false;
+            blink_led(9, 500);
             return SPI_ERROR_TIMEOUT;
         }
     }
-
+    blink_led(5,500);
     uint8_t received_data = (uint8_t)spi->RXDR;
 
     // Wait for EOT flag
     while (!(spi->SR & SPI_SR_EOT)) {
         if (systick_timeout_elapsed(timeout_start, SPI_DEFAULT_TIMEOUT_MS)) {
             handle->transfer_in_progress = false;
+            blink_led(9, 500);
             return SPI_ERROR_TIMEOUT;
         }
     }

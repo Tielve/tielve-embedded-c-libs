@@ -12,10 +12,11 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "tielve_stm32h743_rcc.h"
 
-// -------------------
-// Register Definitons
-// -------------------
+// --------------------
+// Register Definitions
+// --------------------
 typedef struct {
     volatile uint32_t CR1;  ///< 0x00 Control Register 1
     volatile uint32_t CR2;  ///< 0x04 Control Register 2
@@ -46,11 +47,7 @@ typedef struct {
 #define SPI5 ((SPI_TypeDef*)SPI5_BASE)
 #define SPI6 ((SPI_TypeDef*)SPI6_BASE)
 
-/// RCC Advanced Peripheral Bus
-#define RCC_BASE 0x58024400UL ///< RCC Base Address
-#define RCC_APB2ENR (*(volatile uint32_t*)(RCC_BASE + 0x0F0)) ///< APB2 Enable
-#define RCC_APB1LENR (*(volatile uint32_t*)(RCC_BASE + 0x0E8)) ///< APB1 Low Enable
-#define RCC_APB4ENR (*(volatile uint32_t*)(RCC_BASE + 0x0F4)) ///< APB4 Enable
+#define MAX_PRESCALER_POWER 7 ///< Maximum number of prescaler values (2^0 to 2^7)
 
 // ---------------
 // Bit Definitions
@@ -122,13 +119,6 @@ typedef struct {
 #define SPI_IFCR_MODFC (1UL << 9) ///< Mode fault flag clear
 #define SPI_IFCR_TSERFC (1UL << 10) ///< TSERFC flag clear
 #define SPI_IFCR_SUSPC (1UL << 11) ///< Suspend flag clear
-
-#define RCC_APB2ENR_SPI1EN (1UL << 12) ///< SPI1 enable
-#define RCC_APB1LENR_SPI2EN (1UL << 14) ///< SPI2 enable
-#define RCC_APB1LENR_SPI3EN (1UL << 15) ///< SPI3 enable
-#define RCC_APB2ENR_SPI4EN (1UL << 13) ///< SPI4 enable
-#define RCC_APB2ENR_SPI5EN (1UL << 20) ///< SPI5 enable
-#define RCC_APB4ENR_SPI6EN (1UL << 5) ///< SPI6 enable
 
 // ----------------
 // Type Definitions

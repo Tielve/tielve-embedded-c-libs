@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "tielve_stm32h743_spi.h"
+#include "tielve_stm32h743_rcc.h"
 
 /**
  * @brief GPIO Hardware Register Structure
@@ -51,19 +53,6 @@ typedef struct {
 #define GPIOJ ((GPIO_TypeDef*)GPIOJ_BASE)
 #define GPIOK ((GPIO_TypeDef*)GPIOK_BASE)
 
-#define RCC_AHB4ENR (*(volatile uint32_t*)(0x58024400UL + 0x0E0))
-#define RCC_AHB4ENR_GPIOAEN (1UL << 0)
-#define RCC_AHB4ENR_GPIOBEN (1UL << 1)
-#define RCC_AHB4ENR_GPIOCEN (1UL << 2)
-#define RCC_AHB4ENR_GPIODEN (1UL << 3)
-#define RCC_AHB4ENR_GPIOEEN (1UL << 4)
-#define RCC_AHB4ENR_GPIOFEN (1UL << 5)
-#define RCC_AHB4ENR_GPIOGEN (1UL << 6)
-#define RCC_AHB4ENR_GPIOHEN (1UL << 7)
-#define RCC_AHB4ENR_GPIOIEN (1UL << 8)
-#define RCC_AHB4ENR_GPIOJEN (1UL << 9)
-#define RCC_AHB4ENR_GPIOKEN (1UL << 10)
-
 #define GPIO_PIN_0  0
 #define GPIO_PIN_1  1
 #define GPIO_PIN_2  2
@@ -80,6 +69,9 @@ typedef struct {
 #define GPIO_PIN_13 13
 #define GPIO_PIN_14 14
 #define GPIO_PIN_15 15
+
+#define LED_PORT        GPIOH
+#define LED_PIN         GPIO_PIN_7
 
 /**
  * @brief GPIO Pin Modes
@@ -215,5 +207,24 @@ gpio_status_t gpio_set_alternate_function(GPIO_TypeDef* port, uint8_t pin, uint8
  * @return GPIO status code
  */
 gpio_status_t gpio_get_default_config(gpio_config_t* config);
+
+
+/**
+ * @brief Initialize on board LED
+ */
+void led_init();
+
+/**
+ * @brief Blink LED
+ * @param count Number of times to blink LED
+ * @param delay_ms_val delay in ms between blinks
+ */
+void blink_led(uint32_t count, uint32_t delay_ms_val);
+
+/**
+ * @brief Blink a number of times equivalent to SPI Error codes
+ * @param status status code of SPI
+ */
+void spi_error_led(spi_status_t status);
 
 #endif //TIELVE_STM32H743_GPIO_H

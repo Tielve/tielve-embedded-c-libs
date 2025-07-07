@@ -7,9 +7,10 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "tielve_stm32h743_rcc.h"
 
 #define SYSTICK_BASE 0xE000E010UL // ARM Cortex-M systick address
-#define CPU_FREQUENCY_HZ 480000000UL
+#define CPU_FREQUENCY_HZ 64000000UL
 #define SYSTICK_FREQUENCY_HZ 1000UL ///< 1khz or 1ms
 #define SYSTICK_RELOAD_VALUE    (CPU_FREQUENCY_HZ / SYSTICK_FREQUENCY_HZ)
 #define SysTick ((SysTick_Type*)SYSTICK_BASE)

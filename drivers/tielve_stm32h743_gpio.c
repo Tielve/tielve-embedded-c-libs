@@ -3,6 +3,7 @@
 //
 
 #include "tielve_stm32h743_gpio.h"
+#include "tielve_stm32h743_systick.h"
 
 #define NULL ((void *)0)
 
@@ -50,12 +51,9 @@ gpio_status_t gpio_enable_clock(GPIO_TypeDef* port) {
         return GPIO_ERROR_INVALID_PORT;
     }
 
-    // Get clock bit for port if error return error
-    uint32_t clock_bit;
+
     gpio_status_t status = get_port_clock_bit(port, &clock_bit);
-    if (status != GPIO_OK) {
-        return status;
-    }
+
 
     // Enable clock
     RCC_AHB4ENR |= clock_bit;
@@ -257,4 +255,55 @@ gpio_status_t gpio_get_default_config(gpio_config_t* config)
     config->alternate_function = 0;
 
     return GPIO_OK;
+}
+
+void led_init() {
+    gpio_config_t config;
+    gpio_enable_clock(GPIOH);
+    gpio_get_default_config(&config);
+    config.mode = GPIO_MODE_OUTPUT;
+    gpio_config_pin(GPIOH,LED_PIN, &config);
+    gpio_toggle_pin(GPIOH, LED_PIN);
+}
+
+void blink_led(uint32_t count, uint32_t delay_ms_val) {
+    for (uint32_t i = 0; i < count; i++) {
+        gpio_write_pin(LED_PORT, LED_PIN, true);
+        delay_ms(delay_ms_val);
+        gpio_write_pin(LED_PORT, LED_PIN, false);
+        delay_ms(delay_ms_val);
+    }
+}
+
+void spi_error_led(spi_status_t status) {
+    if (status == SPI_OK) {
+        blink_led(2, 500);
+    }
+    if (status == SPI_ERROR_INVALID_HANDLE) {
+        blink_led(3, 500);
+    }
+    if (status == SPI_ERROR_INVALID_PARAM) {
+        blink_led(4, 500);
+    }
+    if (status == SPI_ERROR_NOT_INITIALIZED) {
+        blink_led(5, 500);
+    }
+    if (status == SPI_ERROR_ALREADY_INITIALIZED) {
+        blink_led(6, 500);
+    }
+    if (status == SPI_ERROR_BUSY) {
+        blink_led(7, 500);
+    }
+    if (status == SPI_ERROR_TIMEOUT) {
+        blink_led(8, 500);
+    }
+    if (status == SPI_ERROR_HARDWARE_FAULT) {
+        blink_led(9, 500);
+    }
+    if (status == SPI_ERROR_UNSUPPORTED_INSTANCE) {
+        blink_led(10, 500);
+    }
+    if (status == SPI_ERROR_NO_AVAILABLE_HANDLES) {
+        blink_led(11, 500);
+    }
 }
